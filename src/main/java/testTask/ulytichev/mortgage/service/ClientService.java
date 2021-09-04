@@ -25,7 +25,7 @@ public class ClientService {
     }
 
     public Client findById(int id) {
-        return null;/* clientRepo.getById(id);*/
+        return clientRepo.getOne(id);
     }
 
     public boolean update(Client client) {
