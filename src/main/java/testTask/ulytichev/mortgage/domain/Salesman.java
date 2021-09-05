@@ -7,16 +7,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity
 public class Salesman{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     private String fio;
 
-    @Length(max = 10, min = 10, message = "Неправильные паспортные данные")
+//    @Length(max = 10, min = 10, message = "Неправильные паспортные данные")
     private String passportData;
 
     public Salesman(String fio, String passportData) {

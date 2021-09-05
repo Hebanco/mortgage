@@ -1,5 +1,7 @@
 package testTask.ulytichev.mortgage.domain;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,19 +11,17 @@ public class Seller {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @OneToOne
-    @JoinColumn(name = "salesman_id")
-    private Salesman salesman;
-    @OneToOne
-    @JoinColumn(name = "company_id")
-    private Company company;
+    String name;
 
-    public Seller(Salesman salesman) {
-        this.salesman = salesman;
+    @Length (min = 10, max = 10, message = "Больше 10 символов у продавца")
+    String personalData;
+
+    public Seller(String name, String personalData) {
+        this.name = name;
+        this.personalData = personalData;
     }
 
-    public Seller(Company company) {
-        this.company = company;
+    public Seller() {
     }
 
     public int getId() {
@@ -32,19 +32,19 @@ public class Seller {
         this.id = id;
     }
 
-    public Salesman getSalesman() {
-        return salesman;
+    public String getName() {
+        return name;
     }
 
-    public void setSalesman(Salesman salesman) {
-        this.salesman = salesman;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Company getCompany() {
-        return company;
+    public String getPersonalData() {
+        return personalData;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public void setPersonalData(String personalData) {
+        this.personalData = personalData;
     }
 }
