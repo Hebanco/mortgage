@@ -13,6 +13,7 @@ public class Credit {
     @ManyToOne
     @JoinColumn(name = "creditRate_id")
     private CreditRate creditRate;
+
     private long creditAmount;
     private long totalAmount;
 

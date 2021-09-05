@@ -14,7 +14,10 @@ public class Seller {
     String name;
 
     @Length (min = 10, max = 10, message = "Больше 10 символов у продавца")
-    String personalData;
+    String personalData; // passport/inn
+
+    @Enumerated(EnumType.STRING)
+    private SellerType sellerType;
 
     public Seller(String name, String personalData) {
         this.name = name;
@@ -46,5 +49,44 @@ public class Seller {
 
     public void setPersonalData(String personalData) {
         this.personalData = personalData;
+    }
+
+    public SellerType getSellerType() {
+        return sellerType;
+    }
+
+    public void setSellerType(SellerType sellerType) {
+        this.sellerType = sellerType;
+    }
+
+    private boolean innValidate() {
+        long inn = Long.getLong(personalData);
+        if (sellerType.equals(SellerType.SALESMAN))
+            return false;
+        long resNumber = 0;
+        int lastSymbol = (int) (inn % 10);
+        int tempInn = (int) (inn / 10);
+        resNumber += tempInn % 10 * 8; //9
+        tempInn /= 10;
+        resNumber += tempInn % 10 * 6; //8
+        tempInn /= 10;
+        resNumber += tempInn % 10 * 4; //7
+        tempInn /= 10;
+        resNumber += tempInn % 10 * 9; //6
+        tempInn /= 10;
+        resNumber += tempInn % 10 * 5; //5
+        tempInn /= 10;
+        resNumber += tempInn % 10 * 3; //4
+        tempInn /= 10;
+        resNumber += tempInn % 10 * 10; //3
+        tempInn /= 10;
+        resNumber += tempInn % 10 * 4; //2
+        tempInn /= 10;
+        resNumber += tempInn * 2; //1
+        resNumber = resNumber % 11;
+        if (resNumber % 10 == lastSymbol)
+            return true;
+        else
+            return false;
     }
 }
