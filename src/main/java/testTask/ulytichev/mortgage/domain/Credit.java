@@ -20,9 +20,9 @@ public class Credit {
     @JoinColumn(name = "client_id")
     private Client client;
 
-//    @ManyToOne
-//    @JoinColumn (name = "seller_id")
-//    private Seller seller;
+    @ManyToOne
+    @JoinColumn(name = "seller_id")
+    private Seller seller;
 
     @OneToOne
     @JoinColumn(name = "house_id")

@@ -6,21 +6,20 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Company implements Seller{
+public class Company{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    private String type;
-
+    private String companyType;
 
     private String name;
 
     private long inn;
 
-    public Company(String type, String name, long inn) {
-        this.type = type;
+    public Company(String companyType, String name, long inn) {
+        this.companyType = companyType;
         this.name = name;
         this.inn = inn;
     }
@@ -36,12 +35,12 @@ public class Company implements Seller{
         this.id = id;
     }
 
-    public String getType() {
-        return type;
+    public String getCompanyType() {
+        return companyType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setCompanyType(String companyType) {
+        this.companyType = companyType;
     }
 
     public String getName() {

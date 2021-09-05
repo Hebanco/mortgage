@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Salesman implements Seller{
+public class Salesman{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
