@@ -13,7 +13,7 @@ public class Seller {
 
     String name;
 
-    @Length (min = 10, max = 10, message = "Больше 10 символов у продавца")
+    @Length (min = 10, max = 10, message = "Больше 10 символов данных у продавца")
     String personalData; // passport/inn
 
     @Enumerated(EnumType.STRING)
