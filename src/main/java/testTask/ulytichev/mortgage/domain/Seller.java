@@ -19,9 +19,10 @@ public class Seller {
     @Enumerated(EnumType.STRING)
     private SellerType sellerType;
 
-    public Seller(String name, String personalData) {
+    public Seller(String name, String personalData, SellerType sellerType) {
         this.name = name;
         this.personalData = personalData;
+        this.sellerType = sellerType;
     }
 
     public Seller() {
