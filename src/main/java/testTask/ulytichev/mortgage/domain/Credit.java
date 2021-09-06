@@ -1,6 +1,7 @@
 package testTask.ulytichev.mortgage.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -10,12 +11,14 @@ public class Credit {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "creditRate_id")
-    private CreditRate creditRate;
-
     private long creditAmount;
     private long totalAmount;
+
+    @Min(value = 0, message = "ставка меньше 0")
+    private double creditRate;
+
+    @Min(value = 1, message = "Неправильно введен срок ипотеки")
+    private int years;
 
     @OneToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id")
@@ -25,7 +28,5 @@ public class Credit {
     @JoinColumn(name = "seller_id")
     private Seller seller;
 
-    @OneToOne
-    @JoinColumn(name = "house_id")
-    private House house;
+    private String purposeOfCredit;
 }
