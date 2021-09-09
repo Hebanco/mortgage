@@ -1,8 +1,10 @@
 package testTask.ulytichev.mortgage.domain;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Seller {
@@ -11,6 +13,7 @@ public class Seller {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    @NotBlank(message = "Отсутсвует имя компании")
     String name;
 
     @Length (min = 10, max = 10, message = "Больше 10 символов данных у продавца")
@@ -60,10 +63,10 @@ public class Seller {
         this.sellerType = sellerType;
     }
 
-    private boolean innValidate() {
-        long inn = Long.getLong(personalData);
-        if (sellerType.equals(SellerType.SALESMAN))
-            return false;
+    public boolean innValidate() {
+        long inn = Long.parseLong(personalData);
+//        if (sellerType.equals(SellerType.SALESMAN))
+//            return false;
         long resNumber = 0;
         int lastSymbol = (int) (inn % 10);
         int tempInn = (int) (inn / 10);

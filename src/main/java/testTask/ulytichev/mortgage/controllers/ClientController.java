@@ -1,33 +1,34 @@
 package testTask.ulytichev.mortgage.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import testTask.ulytichev.mortgage.domain.Client;
-import testTask.ulytichev.mortgage.service.ClientService;
+import testTask.ulytichev.mortgage.repos.ClientRepo;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ClientController {
 
-    private final ClientService clientService;
+    private final ClientRepo clientRepo;
 
-    @Autowired
-    public ClientController(ClientService clientService) {
-        this.clientService = clientService;
+    public ClientController(ClientRepo clientRepo) {
+        this.clientRepo = clientRepo;
     }
 
     @PostMapping(value = "/clients")
-    public ResponseEntity<?> create(@RequestBody Client client) {
-        clientService.create(client);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<Client> create(@Valid @RequestBody Client client) {
+
+        clientRepo.saveAndFlush(client);
+        return new ResponseEntity<>(client, HttpStatus.OK);
     }
 
     @GetMapping(value = "/clients")
     public ResponseEntity<List<Client>> read() {
-        final List<Client> clients = clientService.findAll();
+        final List<Client> clients = clientRepo.findAll();
 
         return clients != null &&  !clients.isEmpty()
                 ? new ResponseEntity<>(clients, HttpStatus.OK)
@@ -36,28 +37,40 @@ public class ClientController {
 
     @GetMapping(value = "/clients/{id}")
     public ResponseEntity<Client> read(@PathVariable(name = "id") int id) {
-        final Client client = clientService.findById(id);
 
-        return client != null
-                ? new ResponseEntity<>(client, HttpStatus.OK)
+         Optional<Client> client = clientRepo.findById(id);
+
+        return client.isPresent()
+                ? new ResponseEntity<>(client.get(), HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping(value = "/clients/{id}")
-    public ResponseEntity<?> update(@PathVariable(name = "id") int id, @RequestBody Client client) {
-        boolean updated = clientService.update(client);
+    public ResponseEntity<Client> update(@PathVariable(name = "id") int id, @RequestBody Client updatedClient) {
+        Optional<Client> dbClient = clientRepo.findById(id);
+        if (dbClient.isPresent()) {
+            Client newClient = dbClient.get();
+            if (!updatedClient.getName().isEmpty())
+                newClient.setName(updatedClient.getName());
+            if (!updatedClient.getPassportData().isEmpty())
+                newClient.setPassportData(updatedClient.getPassportData());
+            if (updatedClient.getCredit()!=null)
+                newClient.setCredit(updatedClient.getCredit());
+            clientRepo.saveAndFlush(newClient);
+            return new ResponseEntity<>(newClient,HttpStatus.OK);
+        }
 
-        return updated
-                ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     @DeleteMapping(value = "/clients/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") int id) {
-        boolean deleted = clientService.delete(id);
 
-        return deleted
-                ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        Optional<Client> client = clientRepo.findById(id);
+        if (client.isPresent()) {
+            clientRepo.delete(client.get());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 }

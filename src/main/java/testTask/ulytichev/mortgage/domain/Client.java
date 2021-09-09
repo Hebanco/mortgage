@@ -1,6 +1,7 @@
 package testTask.ulytichev.mortgage.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Client {
@@ -9,12 +10,17 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    @NotBlank
     private String name;
 
+    @NotBlank
     private String passportData;
-//
-//    @OneToOne(mappedBy = "credit_id")
-//    private Credit credit;
+
+    @OneToOne()
+    @JoinColumn(name = "credit_id")
+    private Credit credit;
+
+
 
     public Client() {
     }
@@ -46,5 +52,13 @@ public class Client {
 
     public void setPassportData(String passportData) {
         this.passportData = passportData;
+    }
+
+    public Credit getCredit() {
+        return credit;
+    }
+
+    public void setCredit(Credit credit) {
+        this.credit = credit;
     }
 }
