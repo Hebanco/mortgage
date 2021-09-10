@@ -21,14 +21,14 @@ public class Credit {
     @Max(value = 50, message = "Слишком большой срое ипотеки")
     private int years;
 
+    private String objectOfCredit;
+
     @OneToOne()
     @JoinColumn(name = "client_id")
     private Client client;
 
     @ManyToOne
     private Seller seller;
-
-    private String objectOfCredit;
 
     public Credit(long creditAmount, long totalAmount, double creditRate, int years, Client client, Seller seller, String objectOfCredit) {
         this.creditAmount = creditAmount;
