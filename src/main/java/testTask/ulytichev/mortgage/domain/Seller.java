@@ -1,7 +1,6 @@
 package testTask.ulytichev.mortgage.domain;
 
 import org.hibernate.validator.constraints.Length;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;

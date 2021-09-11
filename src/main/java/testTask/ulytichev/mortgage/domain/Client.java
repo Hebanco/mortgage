@@ -2,6 +2,7 @@ package testTask.ulytichev.mortgage.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Client {
@@ -14,11 +15,13 @@ public class Client {
     private String name;
 
     @NotBlank
+    @Size(min = 10, max = 10, message = "Не правильные паспортные данные")
+    @Column(unique = true)
     private String passportData;
 
-    @OneToOne()
-    @JoinColumn(name = "credit_id")
-    private Credit credit;
+//    @OneToOne()
+//    @JoinColumn(name = "credit_id")
+//    private Credit credit;
 
 
 
@@ -54,11 +57,11 @@ public class Client {
         this.passportData = passportData;
     }
 
-    public Credit getCredit() {
-        return credit;
-    }
-
-    public void setCredit(Credit credit) {
-        this.credit = credit;
-    }
+//    public Credit getCredit() {
+//        return credit;
+//    }
+//
+//    public void setCredit(Credit credit) {
+//        this.credit = credit;
+//    }
 }

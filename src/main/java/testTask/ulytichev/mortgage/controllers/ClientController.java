@@ -54,8 +54,8 @@ public class ClientController {
                 newClient.setName(updatedClient.getName());
             if (!updatedClient.getPassportData().isEmpty())
                 newClient.setPassportData(updatedClient.getPassportData());
-            if (updatedClient.getCredit()!=null)
-                newClient.setCredit(updatedClient.getCredit());
+//            if (updatedClient.getCredit()!=null)
+//                newClient.setCredit(updatedClient.getCredit());
             clientRepo.saveAndFlush(newClient);
             return new ResponseEntity<>(newClient,HttpStatus.OK);
         }

@@ -3,9 +3,6 @@ package testTask.ulytichev.mortgage.servives;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import testTask.ulytichev.mortgage.domain.Client;
 import testTask.ulytichev.mortgage.domain.Credit;
 import testTask.ulytichev.mortgage.domain.Seller;
@@ -41,10 +38,12 @@ public class CreditService {
             else
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        else {
+        else if (credit.getClient()!=null){
             clientRepo.saveAndFlush(credit.getClient());
             creditClient = credit.getClient();
         }
+        else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         if (sellerId!=-1) {
             Optional<Seller> seller = sellerRepo.findById(sellerId);
@@ -53,7 +52,7 @@ public class CreditService {
             else
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        else {
+        else if (credit.getSeller()!=null){
             if (credit.getSeller().getSellerType().equals(SellerType.COMPANY)&&credit.getSeller().innValidate()) {
                 sellerRepo.save(credit.getSeller());
             }
@@ -62,9 +61,11 @@ public class CreditService {
             }
             else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (creditValidation(credit)) {
             creditRepo.saveAndFlush(credit);
-            creditClient.setCredit(credit);
+//            creditClient.setCredit(credit);
             return new ResponseEntity<>(credit, HttpStatus.CREATED);
         }
         else
@@ -133,7 +134,7 @@ public class CreditService {
             if (creditValidation(newCredit)) {
                 creditRepo.saveAndFlush(newCredit);
                 if (creditClient!=null) {
-                    creditClient.setCredit(updatedCredit);
+                    //creditClient.setCredit(updatedCredit);
                     clientRepo.saveAndFlush(creditClient);
                 }
                 return new ResponseEntity<>(newCredit, HttpStatus.CREATED);

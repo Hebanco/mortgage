@@ -30,6 +30,9 @@ public class Credit {
     @ManyToOne
     private Seller seller;
 
+    public Credit() {
+    }
+
     public Credit(long creditAmount, long totalAmount, double creditRate, int years, Client client, Seller seller, String objectOfCredit) {
         this.creditAmount = creditAmount;
         this.totalAmount = totalAmount;
@@ -37,6 +40,14 @@ public class Credit {
         this.years = years;
         this.client = client;
         this.seller = seller;
+        this.objectOfCredit = objectOfCredit;
+    }
+
+    public Credit(long creditAmount, long totalAmount, double creditRate, int years, String objectOfCredit) {
+        this.creditAmount = creditAmount;
+        this.totalAmount = totalAmount;
+        this.creditRate = creditRate;
+        this.years = years;
         this.objectOfCredit = objectOfCredit;
     }
 
