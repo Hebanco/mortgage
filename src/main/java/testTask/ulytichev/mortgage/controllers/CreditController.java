@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import testTask.ulytichev.mortgage.domain.Credit;
 import testTask.ulytichev.mortgage.servives.CreditService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -17,7 +18,7 @@ public class CreditController {
     }
 
     @PostMapping(value = "/credits")
-    public ResponseEntity<Credit> create(@RequestBody Credit credit,
+    public ResponseEntity<Credit> create(@Valid @RequestBody Credit credit,
                                          @RequestParam(required = false, defaultValue = "-1", name = "clientId") int clientId,
                                          @RequestParam(required = false, defaultValue = "-1", name = "sellerId") int sellerId) {
         return creditService.create(credit, clientId, sellerId);

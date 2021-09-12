@@ -128,7 +128,7 @@ public class CreditService {
                 newCredit.setCreditRate(updatedCredit.getCreditRate());
             if (updatedCredit.getYears()>0)
                 newCredit.setYears(updatedCredit.getYears());
-            if (!updatedCredit.getObjectOfCredit().isEmpty())
+            if (updatedCredit.getObjectOfCredit()!=null)
                 newCredit.setObjectOfCredit(updatedCredit.getObjectOfCredit());
 
             if (creditValidation(newCredit)) {
@@ -137,7 +137,7 @@ public class CreditService {
                     //creditClient.setCredit(updatedCredit);
                     clientRepo.saveAndFlush(creditClient);
                 }
-                return new ResponseEntity<>(newCredit, HttpStatus.CREATED);
+                return new ResponseEntity<>(newCredit, HttpStatus.OK);
             } else
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
         }

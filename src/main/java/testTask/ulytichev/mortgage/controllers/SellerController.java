@@ -8,6 +8,7 @@ import testTask.ulytichev.mortgage.domain.Seller;
 import testTask.ulytichev.mortgage.domain.SellerType;
 import testTask.ulytichev.mortgage.repos.SellerRepo;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +23,7 @@ public class SellerController {
     }
 
     @PostMapping(value = "/sellers")
-    public ResponseEntity<Seller> create(@RequestBody Seller seller) {
+    public ResponseEntity<Seller> create(@Valid @RequestBody Seller seller) {
         if (seller.getSellerType().equals(SellerType.COMPANY)&&seller.innValidate()) {
             sellerRepo.saveAndFlush(seller);
             return new ResponseEntity<>(seller, HttpStatus.CREATED);
@@ -53,17 +54,17 @@ public class SellerController {
     }
 
     @PutMapping(value = "/sellers/{id}")
-    public ResponseEntity<Seller> update(@PathVariable(name = "id") int id, @RequestBody Seller updatedSeller) {
+    public ResponseEntity<Seller> update(@PathVariable(name = "id") int id, @Valid @RequestBody Seller updatedSeller) {
 
         Optional<Seller> dbSeller = sellerRepo.findById(id);
         if (dbSeller.isPresent()) {
             Seller newSeller = dbSeller.get();
-            if (newSeller.getSellerType().equals(SellerType.COMPANY)&&!updatedSeller.getPersonalData().isEmpty())
+            if (newSeller.getSellerType().equals(SellerType.COMPANY)&&updatedSeller.getPersonalData()!=null)
                 if (!updatedSeller.innValidate())
                     return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-            if (!updatedSeller.getName().isEmpty())
+            if (updatedSeller.getName()!=null)
                 newSeller.setName(updatedSeller.getName());
-            if (!updatedSeller.getPersonalData().isEmpty())
+            if (updatedSeller.getPersonalData()!=null)
                 newSeller.setPersonalData(updatedSeller.getPersonalData());
             sellerRepo.saveAndFlush(newSeller);
             return new ResponseEntity<>(newSeller,HttpStatus.OK);

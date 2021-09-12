@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 public class Credit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Min(value = 100000)
@@ -21,7 +21,7 @@ public class Credit {
     private double creditRate;
 
     @Min(value = 1, message = "Неправильно введен срок ипотеки")
-    @Max(value = 50, message = "Слишком большой срое ипотеки")
+    @Max(value = 50, message = "Слишком большой срок ипотеки")
     private int years;
 
     @NotBlank

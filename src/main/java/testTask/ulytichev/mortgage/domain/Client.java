@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 public class Client {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotBlank
@@ -18,12 +18,6 @@ public class Client {
     @Size(min = 10, max = 10, message = "Не правильные паспортные данные")
     @Column(unique = true)
     private String passportData;
-
-//    @OneToOne()
-//    @JoinColumn(name = "credit_id")
-//    private Credit credit;
-
-
 
     public Client() {
     }

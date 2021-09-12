@@ -23,7 +23,7 @@ public class ClientController {
     public ResponseEntity<Client> create(@Valid @RequestBody Client client) {
 
         clientRepo.saveAndFlush(client);
-        return new ResponseEntity<>(client, HttpStatus.OK);
+        return new ResponseEntity<>(client, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/clients")
@@ -50,12 +50,10 @@ public class ClientController {
         Optional<Client> dbClient = clientRepo.findById(id);
         if (dbClient.isPresent()) {
             Client newClient = dbClient.get();
-            if (!updatedClient.getName().isEmpty())
+            if (updatedClient.getName()!=null/*||!updatedClient.getName().isEmpty()*/)
                 newClient.setName(updatedClient.getName());
-            if (!updatedClient.getPassportData().isEmpty())
+            if (updatedClient.getPassportData()!=null/*||!updatedClient.getPassportData().isEmpty()*/)
                 newClient.setPassportData(updatedClient.getPassportData());
-//            if (updatedClient.getCredit()!=null)
-//                newClient.setCredit(updatedClient.getCredit());
             clientRepo.saveAndFlush(newClient);
             return new ResponseEntity<>(newClient,HttpStatus.OK);
         }

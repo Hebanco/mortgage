@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import testTask.ulytichev.mortgage.controllers.CreditController;
+import testTask.ulytichev.mortgage.domain.Client;
 import testTask.ulytichev.mortgage.domain.Credit;
 import testTask.ulytichev.mortgage.domain.Seller;
 import testTask.ulytichev.mortgage.domain.SellerType;
@@ -17,8 +18,8 @@ import testTask.ulytichev.mortgage.repos.ClientRepo;
 import testTask.ulytichev.mortgage.repos.CreditRepo;
 import testTask.ulytichev.mortgage.repos.SellerRepo;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,11 +33,11 @@ public class CreditControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    SellerRepo sellerRepo;
+    private SellerRepo sellerRepo;
     @Autowired
-    CreditRepo creditRepo;
+    private CreditRepo creditRepo;
     @Autowired
-    ClientRepo clientRepo;
+    private ClientRepo clientRepo;
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -50,7 +51,6 @@ public class CreditControllerTest {
         Credit credit = new Credit(1000000, 1500000,
                 5.6, 30, "Квартира");
         Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
-        sellerRepo.saveAndFlush(seller);
 
         mockMvc.perform(post("/credits")
                 .content(objectMapper.writeValueAsString(credit))
@@ -79,7 +79,6 @@ public class CreditControllerTest {
         Credit credit = new Credit(1000000, 1500000,
                 5.6, 30, "Квартира");
         Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
-        sellerRepo.saveAndFlush(seller);
 
         mockMvc.perform(post("/credits")
                 .content(objectMapper.writeValueAsString(credit))
@@ -93,7 +92,6 @@ public class CreditControllerTest {
         Credit credit = new Credit(1500000, 1400000,
                 5.6, 30, "Квартира");
         Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
-        sellerRepo.saveAndFlush(seller);
 
         mockMvc.perform(post("/credits")
                 .content(objectMapper.writeValueAsString(credit))
@@ -106,7 +104,6 @@ public class CreditControllerTest {
     @Test
     public void getCreditTest() throws Exception {
         Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
-        sellerRepo.saveAndFlush(seller);
         Credit credit = new Credit(1000000, 1500000,
                 5.6, 30, "Квартира", clientRepo.getOne(1), seller);
         creditRepo.saveAndFlush(credit);
@@ -118,13 +115,11 @@ public class CreditControllerTest {
     @Test
     public void getCreditConsistTest() throws Exception {
         Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
-        sellerRepo.saveAndFlush(seller);
         Credit credit = new Credit(1000000, 1500000,
                 5.6, 30, "Квартира" ,clientRepo.getOne(1), seller);
         creditRepo.saveAndFlush(credit);
 
-        mockMvc.perform(get("/credits/2")
-                .requestAttr("id", credit.getId())
+        mockMvc.perform(get("/credits/"+credit.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.client.id").value(1))
@@ -135,8 +130,38 @@ public class CreditControllerTest {
                 .andExpect(jsonPath("$.years").value(30));
     }
 
+    @Test
+    public void updateCreditTest() throws Exception{
+        Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
+        Credit credit = new Credit(1000000, 1500000,
+                5.6, 30, "Квартира" ,clientRepo.getOne(1), seller);
+        creditRepo.saveAndFlush(credit);
+        Credit updatedCredit = new Credit();
+        updatedCredit.setCreditAmount(1500000);
+        updatedCredit.setTotalAmount(1900000);
+        this.mockMvc.perform(put("/credits/2")
+                .content(objectMapper.writeValueAsString(updatedCredit))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(2))
+                .andExpect(jsonPath("$.creditAmount").value(1500000))
+                .andExpect(jsonPath("$.totalAmount").value(1900000));
+    }
+
+    @Test
+    public void deleteCreditTest() throws Exception{
+        Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
+        Credit credit = new Credit(1000000, 1500000,
+                5.6, 30, "Квартира" ,clientRepo.getOne(1), seller);
+        creditRepo.saveAndFlush(credit);
+        this.mockMvc.perform(delete("/credits/"+credit.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").doesNotExist());
+    }
+
     private Seller createSeller (String name, String personalData, SellerType sellerType) {
         Seller seller = new Seller(name, personalData, sellerType);
+        sellerRepo.saveAndFlush(seller);
         return seller;
     }
 }
