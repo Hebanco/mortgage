@@ -13,10 +13,12 @@ import testTask.ulytichev.mortgage.controllers.CreditController;
 import testTask.ulytichev.mortgage.domain.Credit;
 import testTask.ulytichev.mortgage.domain.Seller;
 import testTask.ulytichev.mortgage.domain.SellerType;
+import testTask.ulytichev.mortgage.repos.ClientRepo;
 import testTask.ulytichev.mortgage.repos.CreditRepo;
 import testTask.ulytichev.mortgage.repos.SellerRepo;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,6 +35,8 @@ public class CreditControllerTest {
     SellerRepo sellerRepo;
     @Autowired
     CreditRepo creditRepo;
+    @Autowired
+    ClientRepo clientRepo;
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -62,15 +66,73 @@ public class CreditControllerTest {
     public void addCreditWithoutUserFailTest() throws Exception {
         Credit credit = new Credit(1000000, 1500000,
                 5.6, 30, "Квартира");
+
+        mockMvc.perform(post("/credits")
+                .content(objectMapper.writeValueAsString(credit))
+                .param("clientId", "1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void addCreditWithoutSellersFailTest() throws Exception {
+        Credit credit = new Credit(1000000, 1500000,
+                5.6, 30, "Квартира");
         Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
         sellerRepo.saveAndFlush(seller);
 
         mockMvc.perform(post("/credits")
                 .content(objectMapper.writeValueAsString(credit))
-//                .param("clientId", "1")
                 .param("sellerId", String.valueOf(seller.getId()))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void addCreditValidFailTest() throws Exception {
+        Credit credit = new Credit(1500000, 1400000,
+                5.6, 30, "Квартира");
+        Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
+        sellerRepo.saveAndFlush(seller);
+
+        mockMvc.perform(post("/credits")
+                .content(objectMapper.writeValueAsString(credit))
+                .param("sellerId", String.valueOf(seller.getId()))
+                .param("clientId", "1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    public void getCreditTest() throws Exception {
+        Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
+        sellerRepo.saveAndFlush(seller);
+        Credit credit = new Credit(1000000, 1500000,
+                5.6, 30, "Квартира", clientRepo.getOne(1), seller);
+        creditRepo.saveAndFlush(credit);
+        this.mockMvc.perform(get("/credits"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists());
+    }
+
+    @Test
+    public void getCreditConsistTest() throws Exception {
+        Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
+        sellerRepo.saveAndFlush(seller);
+        Credit credit = new Credit(1000000, 1500000,
+                5.6, 30, "Квартира" ,clientRepo.getOne(1), seller);
+        creditRepo.saveAndFlush(credit);
+
+        mockMvc.perform(get("/credits/2")
+                .requestAttr("id", credit.getId())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.client.id").value(1))
+                .andExpect(jsonPath("$.seller.id").value(seller.getId()))
+                .andExpect(jsonPath("$.creditAmount").value(1000000))
+                .andExpect(jsonPath("$.totalAmount").value(1500000))
+                .andExpect(jsonPath("$.creditRate").value(5.6))
+                .andExpect(jsonPath("$.years").value(30));
     }
 
     private Seller createSeller (String name, String personalData, SellerType sellerType) {
