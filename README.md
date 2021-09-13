@@ -15,3 +15,13 @@ API позволяет взаимодействовать с покупател�
   передается новый id
 Для удаления записей отправляется delete запрос с на:
   - /clients/id, /sellers/id, и /credits/id
+
+Входные данные:
+String jsonInputClient = "{"name": "Client", "passportData": "1233455678"}";
+String jsonInputSeller = "{"name": "Seller Company", "personalData": "7704407589", "sellerType": "COMPANY"}";
+String jsonInputSeller = "{"name": "Seller salesman", "personalData": "7704407588", "sellerType": "SALESMAN"}";
+String jsonInputCreditWithId = "{"creditAmount": "1000000", "totalAmount": "1500000", "creditRate": "-1", 
+"years": "10", "objectOfCredit": "Квартира в новостройке"}";
+String jsonInputCreditByJSON = "{"creditAmount": "1000000", "totalAmount": "1500000", "creditRate": "-1", "years": "10",
+"objectOfCredit": "Квартира в новостройке", "client":{ "name": "gfd", "passportData": "1234567890"},
+"seller":{ "name": "gfd", "personalData": "7704407589", "sellerType": "COMPANY"}}";

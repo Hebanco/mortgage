@@ -12,7 +12,7 @@ public class Seller {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotBlank(message = "Отсутсвует имя компании")
+    @NotBlank(message = "Отсутствует имя компании")
     String name;
 
     @Length (min = 10, max = 10, message = "Больше 10 символов данных у продавца")
