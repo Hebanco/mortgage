@@ -139,11 +139,11 @@ public class CreditControllerTest {
         Credit updatedCredit = new Credit();
         updatedCredit.setCreditAmount(1500000);
         updatedCredit.setTotalAmount(1900000);
-        this.mockMvc.perform(put("/credits/2")
+        this.mockMvc.perform(put("/credits/"+credit.getId())
                 .content(objectMapper.writeValueAsString(updatedCredit))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(2))
+                .andExpect(jsonPath("$.id").value(credit.getId()))
                 .andExpect(jsonPath("$.creditAmount").value(1500000))
                 .andExpect(jsonPath("$.totalAmount").value(1900000));
     }
