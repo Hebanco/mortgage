@@ -1,8 +1,7 @@
 package testTask.ulytichev.mortgage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SellerControllerTest {
     @Autowired
     private SellerController sellerController;
@@ -35,6 +35,7 @@ public class SellerControllerTest {
     }
 
     @Test
+    @Order(1)
     public void addSellerTest() throws Exception {
         Seller seller = new Seller("asdasf", "7704407589", SellerType.COMPANY);
         mockMvc.perform(post("/sellers")
@@ -45,6 +46,7 @@ public class SellerControllerTest {
     }
 
     @Test
+    @Order(5)
     public void addSellerFailTest() throws Exception {
         Seller seller = new Seller("asdasf", "12345678", SellerType.COMPANY);
         mockMvc.perform(post("/sellers")
@@ -54,6 +56,7 @@ public class SellerControllerTest {
     }
 
     @Test
+    @Order(2)
     public void getSellerTest() throws Exception {
         Seller seller = new Seller("asdasf", "7704407589", SellerType.COMPANY);
         sellerRepo.saveAndFlush(seller);
@@ -63,6 +66,7 @@ public class SellerControllerTest {
     }
 
     @Test
+    @Order(3)
     public void updateSellerTest() throws Exception{
         Seller dbSeller = new Seller("asdasf", "7704407589", SellerType.COMPANY);
         sellerRepo.saveAndFlush(dbSeller);
@@ -77,6 +81,7 @@ public class SellerControllerTest {
     }
 
     @Test
+    @Order(4)
     public void deleteSellerTest() throws Exception{
         Seller seller = new Seller("asdasf", "1234567890", SellerType.COMPANY);
         sellerRepo.saveAndFlush(seller);

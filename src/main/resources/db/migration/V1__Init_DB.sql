@@ -1,10 +1,7 @@
-create table hibernate_sequence (next_val bigint) engine=InnoDB;
-insert into hibernate_sequence values ( 1 );
-
 create table client (
     id integer not null,
     name varchar(255),
-    passport_data varchar(10) unique,
+    passport_data varchar(10),
     primary key (id)
 );
 
