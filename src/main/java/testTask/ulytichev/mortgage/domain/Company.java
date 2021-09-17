@@ -2,11 +2,11 @@ package testTask.ulytichev.mortgage.domain;
 
 import testTask.ulytichev.mortgage.utils.InnValid;
 
+@InnValid
 public class Company extends Seller{
 
     private int id;
     private String name;
-    @InnValid
     private String inn;
 
     public Company() {
@@ -18,7 +18,7 @@ public class Company extends Seller{
         this.inn = inn;
     }
 
-    public static Company convertToCompany (Seller seller){
+    public static Company convertSellerToCompany (Seller seller){
         return new Company(seller.getId(), seller.getName(), seller.getPersonalData());
     }
 
@@ -50,32 +50,4 @@ public class Company extends Seller{
         this.inn = inn;
     }
 
-    private boolean innValidate() {
-        long longInn = Long.parseLong(inn);
-        long resNumber = 0;
-        int lastSymbol = (int) (longInn % 10);
-        int tempInn = (int) (longInn / 10);
-        resNumber += tempInn % 10 * 8; //9
-        tempInn /= 10;
-        resNumber += tempInn % 10 * 6; //8
-        tempInn /= 10;
-        resNumber += tempInn % 10 * 4; //7
-        tempInn /= 10;
-        resNumber += tempInn % 10 * 9; //6
-        tempInn /= 10;
-        resNumber += tempInn % 10 * 5; //5
-        tempInn /= 10;
-        resNumber += tempInn % 10 * 3; //4
-        tempInn /= 10;
-        resNumber += tempInn % 10 * 10; //3
-        tempInn /= 10;
-        resNumber += tempInn % 10 * 4; //2
-        tempInn /= 10;
-        resNumber += tempInn * 2; //1
-        resNumber = resNumber % 11;
-        if (resNumber % 10 == lastSymbol)
-            return true;
-        else
-            return false;
-    }
 }

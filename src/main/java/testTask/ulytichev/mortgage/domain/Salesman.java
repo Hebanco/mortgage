@@ -15,7 +15,7 @@ public class Salesman extends Seller{
         this.passportData = passportData;
     }
 
-    public static Salesman convertToSalesman (Seller seller){
+    public static Salesman convertSellerToSalesman (Seller seller){
         return new Salesman(seller.getId(), seller.getName(), seller.getPersonalData());
     }
 

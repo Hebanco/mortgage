@@ -1,11 +1,13 @@
 package testTask.ulytichev.mortgage.domain;
 
 import org.hibernate.validator.constraints.Length;
+import testTask.ulytichev.mortgage.utils.InnValid;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Entity
+@InnValid
 public class Seller {
 
     @Id
@@ -16,7 +18,7 @@ public class Seller {
     private String name;
 
     @Length (min = 10, max = 10, message = "Больше 10 символов данных у продавца")
-    private String personalData; // passport/inn
+    private String personalData;
 
     @Enumerated(EnumType.STRING)
     private SellerType sellerType;
@@ -67,5 +69,13 @@ public class Seller {
 
     public void setSellerType(SellerType sellerType) {
         this.sellerType = sellerType;
+    }
+
+    public static Seller convertCompanyToSeller (Company company){
+        return new Seller(company.getId(), company.getName(), company.getInn(), SellerType.COMPANY);
+    }
+
+    public static Seller convertSalesmanToSeller (Salesman salesman){
+        return new Seller(salesman.getId(), salesman.getName(), salesman.getPassportData(), SellerType.SALESMAN);
     }
 }
