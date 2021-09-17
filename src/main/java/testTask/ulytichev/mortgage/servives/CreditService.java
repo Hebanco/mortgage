@@ -53,13 +53,13 @@ public class CreditService {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         else if (credit.getSeller()!=null){
-            if (credit.getSeller().getSellerType().equals(SellerType.COMPANY)&&credit.getSeller().innValidate()) {
-                sellerRepo.save(credit.getSeller());
-            }
-            else if (credit.getSeller().getSellerType().equals(SellerType.SALESMAN)){
-                sellerRepo.save(credit.getSeller());
-            }
-            else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//            if (credit.getSeller().getSellerType().equals(SellerType.COMPANY)&&credit.getSeller().innValidate()) {
+//                sellerRepo.save(credit.getSeller());
+//            }
+//            else if (credit.getSeller().getSellerType().equals(SellerType.SALESMAN)){
+//                sellerRepo.save(credit.getSeller());
+//            }
+//            else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         else
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

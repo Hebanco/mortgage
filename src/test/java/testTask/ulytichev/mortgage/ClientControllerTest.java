@@ -1,7 +1,10 @@
 package testTask.ulytichev.mortgage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql(value = {"/create-client-before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ClientControllerTest {
 
     @Autowired
@@ -30,22 +34,20 @@ public class ClientControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-
-
     @Test
+    @Order(4)
     public void addClientTest() throws Exception {
         clientRepo.deleteAll();
         Client client = new Client("asdasf", "1234567890");
-        client.setId(2);
         mockMvc.perform(post("/clients")
                 .content(objectMapper.writeValueAsString(client))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").isNumber());
+                .andExpect(status().isCreated());
     }
 
     @Test
-    public void addClientFailTest() throws Exception {
+    @Order(5)
+    public void addClientFailPassportValidTest() throws Exception {
         Client client = new Client("asdasf", "12345678");
         mockMvc.perform(post("/clients")
                 .content(objectMapper.writeValueAsString(client))
@@ -54,18 +56,16 @@ public class ClientControllerTest {
     }
 
     @Test
+    @Order(1)
     public void getClientTest() throws Exception {
-//        Client client = new Client("asdasf", "1234567890");
-//        clientRepo.saveAndFlush(client);
         this.mockMvc.perform(get("/clients/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists());
     }
 
     @Test
+    @Order(2)
     public void updateClientTest() throws Exception{
-//        Client dbClient = new Client("asdasf", "1234567890");
-//        clientRepo.saveAndFlush(dbClient);
         Client updatedClient = new Client();
         updatedClient.setPassportData("0987654321");
         this.mockMvc.perform(put("/clients/1")
@@ -77,9 +77,8 @@ public class ClientControllerTest {
     }
 
     @Test
+    @Order(3)
     public void deleteClientTest() throws Exception{
-//        Client Client = new Client("asdasf", "1234567890");
-//        clientRepo.saveAndFlush(Client);
         this.mockMvc.perform(delete("/clients/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
