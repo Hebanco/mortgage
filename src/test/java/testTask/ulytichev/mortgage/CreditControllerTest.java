@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(value = {"/create-client-before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = {"/create-client-before.sql", "/create-seller-before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CreditControllerTest {
 
@@ -51,12 +51,12 @@ public class CreditControllerTest {
     public void addCreditTest() throws Exception {
         Credit credit = new Credit(1000000, 1500000,
                 5.6, 30, "Квартира");
-        Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
+//        Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
 
         mockMvc.perform(post("/credits")
                 .content(objectMapper.writeValueAsString(credit))
                 .param("clientId", "1")
-                .param("sellerId", String.valueOf(seller.getId()))
+                .param("sellerId", "1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNumber())
@@ -81,11 +81,11 @@ public class CreditControllerTest {
     public void addCreditWithoutSellersFailTest() throws Exception {
         Credit credit = new Credit(1000000, 1500000,
                 5.6, 30, "Квартира");
-        Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
+//        Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
 
         mockMvc.perform(post("/credits")
                 .content(objectMapper.writeValueAsString(credit))
-                .param("sellerId", String.valueOf(seller.getId()))
+                .param("sellerId", "1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -95,22 +95,22 @@ public class CreditControllerTest {
     public void addCreditValidFailTest() throws Exception {
         Credit credit = new Credit(1500000, 1400000,
                 5.6, 30, "Квартира");
-        Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
+//        Seller seller = createSeller("seller", "7704407589", SellerType.SALESMAN);
 
         mockMvc.perform(post("/credits")
                 .content(objectMapper.writeValueAsString(credit))
-                .param("sellerId", String.valueOf(seller.getId()))
+                .param("sellerId", "1")
                 .param("clientId", "1")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isConflict());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
     @Order(2)
     public void getCreditTest() throws Exception {
-        Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
+//        Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
         Credit credit = new Credit(1000000, 1500000,
-                5.6, 30, "Квартира", clientRepo.getOne(1), seller);
+                5.6, 30, "Квартира", clientRepo.getOne(1), sellerRepo.getOne(1));
         creditRepo.saveAndFlush(credit);
         this.mockMvc.perform(get("/credits"))
                 .andExpect(status().isOk())
@@ -120,16 +120,16 @@ public class CreditControllerTest {
     @Test
     @Order(8)
     public void getCreditConsistTest() throws Exception {
-        Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
+//        Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
         Credit credit = new Credit(1000000, 1500000,
-                5.6, 30, "Квартира" ,clientRepo.getOne(1), seller);
+                5.6, 30, "Квартира" ,clientRepo.getOne(1), sellerRepo.getOne(1));
         creditRepo.saveAndFlush(credit);
 
         mockMvc.perform(get("/credits/"+credit.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.client.id").value(1))
-                .andExpect(jsonPath("$.seller.id").value(seller.getId()))
+                .andExpect(jsonPath("$.seller.id").value(1))
                 .andExpect(jsonPath("$.creditAmount").value(1000000))
                 .andExpect(jsonPath("$.totalAmount").value(1500000))
                 .andExpect(jsonPath("$.creditRate").value(5.6))
@@ -139,9 +139,9 @@ public class CreditControllerTest {
     @Test
     @Order(3)
     public void updateCreditTest() throws Exception{
-        Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
+//        Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
         Credit credit = new Credit(1000000, 1500000,
-                5.6, 30, "Квартира" ,clientRepo.getOne(1), seller);
+                5.6, 30, "Квартира" ,clientRepo.getOne(1), sellerRepo.getOne(1));
         creditRepo.saveAndFlush(credit);
         Credit updatedCredit = new Credit();
         updatedCredit.setCreditAmount(1500000);
@@ -158,18 +158,18 @@ public class CreditControllerTest {
     @Test
     @Order(4)
     public void deleteCreditTest() throws Exception{
-        Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
+//        Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
         Credit credit = new Credit(1000000, 1500000,
-                5.6, 30, "Квартира" ,clientRepo.getOne(1), seller);
+                5.6, 30, "Квартира" ,clientRepo.getOne(1), sellerRepo.getOne(1));
         creditRepo.saveAndFlush(credit);
         this.mockMvc.perform(delete("/credits/"+credit.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
     }
 
-    private Seller createSeller (String name, String personalData, SellerType sellerType) {
-        Seller seller = new Seller(name, personalData, sellerType);
-        sellerRepo.saveAndFlush(seller);
-        return seller;
-    }
+//    private Seller createSeller (String name, String personalData, SellerType sellerType) {
+//        Seller seller = new Seller(name, personalData, sellerType);
+//        sellerRepo.saveAndFlush(seller);
+//        return seller;
+//    }
 }

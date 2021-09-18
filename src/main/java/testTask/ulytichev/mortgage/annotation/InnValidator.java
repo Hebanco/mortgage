@@ -1,4 +1,4 @@
-package testTask.ulytichev.mortgage.utils;
+package testTask.ulytichev.mortgage.annotation;
 
 import testTask.ulytichev.mortgage.domain.Seller;
 import testTask.ulytichev.mortgage.domain.SellerType;

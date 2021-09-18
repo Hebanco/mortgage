@@ -50,12 +50,4 @@ public class Client {
     public void setPassportData(String passportData) {
         this.passportData = passportData;
     }
-
-//    public Credit getCredit() {
-//        return credit;
-//    }
-//
-//    public void setCredit(Credit credit) {
-//        this.credit = credit;
-//    }
 }

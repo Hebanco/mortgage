@@ -1,6 +1,6 @@
 package testTask.ulytichev.mortgage.domain;
 
-import testTask.ulytichev.mortgage.utils.InnValid;
+import testTask.ulytichev.mortgage.annotation.InnValid;
 
 @InnValid
 public class Company extends Seller{

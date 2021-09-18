@@ -1,11 +1,14 @@
 package testTask.ulytichev.mortgage.domain;
 
+import testTask.ulytichev.mortgage.annotation.CreditAmountValid;
+
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 @Entity
+@CreditAmountValid
 public class Credit {
 
     @Id

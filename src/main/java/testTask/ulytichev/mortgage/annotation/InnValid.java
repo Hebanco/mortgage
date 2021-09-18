@@ -1,4 +1,4 @@
-package testTask.ulytichev.mortgage.utils;
+package testTask.ulytichev.mortgage.annotation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

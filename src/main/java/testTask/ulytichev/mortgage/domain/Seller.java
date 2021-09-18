@@ -2,7 +2,7 @@ package testTask.ulytichev.mortgage.domain;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.validator.constraints.Length;
-import testTask.ulytichev.mortgage.utils.InnValid;
+import testTask.ulytichev.mortgage.annotation.InnValid;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
