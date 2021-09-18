@@ -24,15 +24,10 @@ public class SellerController {
 
     @PostMapping(value = "/sellers")
     public ResponseEntity<Seller> create(@Valid @RequestBody Seller seller) {
-//        if (seller.getSellerType().equals(SellerType.COMPANY)&&seller.innValidate()) {
-//            sellerRepo.saveAndFlush(seller);
-//            return new ResponseEntity<>(seller, HttpStatus.CREATED);
-//        }
-//        else if (seller.getSellerType().equals(SellerType.SALESMAN)){
-//            sellerRepo.saveAndFlush(seller);
-//            return new ResponseEntity<>(seller, HttpStatus.CREATED);
-//        }
-        return new ResponseEntity<>(HttpStatus.CONFLICT);
+            sellerRepo.saveAndFlush(seller);
+            return seller.getId()!=0
+                    ? new ResponseEntity<>(seller, HttpStatus.CREATED)
+                    : new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
     @GetMapping(value = "/sellers")
@@ -59,9 +54,6 @@ public class SellerController {
         Optional<Seller> dbSeller = sellerRepo.findById(id);
         if (dbSeller.isPresent()) {
             Seller newSeller = dbSeller.get();
-//            if (newSeller.getSellerType().equals(SellerType.COMPANY)&&updatedSeller.getPersonalData()!=null)
-//                if (!updatedSeller.innValidate())
-//                    return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
             if (updatedSeller.getName()!=null)
                 newSeller.setName(updatedSeller.getName());
             if (updatedSeller.getPersonalData()!=null)
@@ -69,7 +61,6 @@ public class SellerController {
             sellerRepo.saveAndFlush(newSeller);
             return new ResponseEntity<>(newSeller,HttpStatus.OK);
         }
-
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 

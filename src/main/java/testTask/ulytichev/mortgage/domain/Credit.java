@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 public class Credit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
 
     @Min(value = 100000)

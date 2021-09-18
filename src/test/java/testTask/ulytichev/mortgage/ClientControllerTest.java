@@ -42,7 +42,8 @@ public class ClientControllerTest {
         mockMvc.perform(post("/clients")
                 .content(objectMapper.writeValueAsString(client))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isNumber());
     }
 
     @Test

@@ -29,7 +29,7 @@ public class SellerControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @BeforeEach
+    @AfterEach
     public void resetDb() {
         sellerRepo.deleteAll();
     }
@@ -37,6 +37,7 @@ public class SellerControllerTest {
     @Test
     @Order(1)
     public void addSellerTest() throws Exception {
+        sellerRepo.deleteAll();
         Seller seller = new Seller("asdasf", "7704407589", SellerType.COMPANY);
         mockMvc.perform(post("/sellers")
                 .content(objectMapper.writeValueAsString(seller))
@@ -83,7 +84,7 @@ public class SellerControllerTest {
     @Test
     @Order(4)
     public void deleteSellerTest() throws Exception{
-        Seller seller = new Seller("asdasf", "1234567890", SellerType.COMPANY);
+        Seller seller = new Seller("asdasf", "1234567890", SellerType.SALESMAN);
         sellerRepo.saveAndFlush(seller);
         this.mockMvc.perform(delete("/sellers/"+seller.getId()))
                 .andExpect(status().isOk())

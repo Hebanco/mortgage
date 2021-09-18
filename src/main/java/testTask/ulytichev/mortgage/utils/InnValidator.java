@@ -10,7 +10,7 @@ public class InnValidator implements ConstraintValidator<InnValid, Seller> {
 
     @Override
     public boolean isValid(Seller seller, ConstraintValidatorContext constraintValidatorContext) {
-        if (seller.getSellerType().equals(SellerType.COMPANY)) {
+        if (seller.getSellerType()!=null&&seller.getSellerType().equals(SellerType.COMPANY)) {
             long longInn = Long.parseLong(seller.getPersonalData());
             long resNumber = 0;
             int lastSymbol = (int) (longInn % 10);

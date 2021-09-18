@@ -1,5 +1,6 @@
 package testTask.ulytichev.mortgage.domain;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.validator.constraints.Length;
 import testTask.ulytichev.mortgage.utils.InnValid;
 
@@ -11,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 public class Seller {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
 
     @NotBlank(message = "Отсутствует имя компании")
@@ -21,6 +22,7 @@ public class Seller {
     private String personalData;
 
     @Enumerated(EnumType.STRING)
+    @ColumnDefault("SALESMAN")
     private SellerType sellerType;
 
     public Seller(String name, String personalData, SellerType sellerType) {

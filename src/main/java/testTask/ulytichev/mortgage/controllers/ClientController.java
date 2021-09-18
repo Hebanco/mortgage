@@ -21,15 +21,15 @@ public class ClientController {
 
     @PostMapping(value = "/clients")
     public ResponseEntity<Client> create(@Valid @RequestBody Client client) {
-
         clientRepo.saveAndFlush(client);
-        return new ResponseEntity<>(client, HttpStatus.CREATED);
+        return client.getId()!=0
+                ? new ResponseEntity<>(client, HttpStatus.CREATED)
+                : new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
     @GetMapping(value = "/clients")
     public ResponseEntity<List<Client>> read() {
         final List<Client> clients = clientRepo.findAll();
-
         return clients != null &&  !clients.isEmpty()
                 ? new ResponseEntity<>(clients, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
