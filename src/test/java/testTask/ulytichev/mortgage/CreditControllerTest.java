@@ -1,8 +1,7 @@
 package testTask.ulytichev.mortgage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql(value = {"/create-client-before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CreditControllerTest {
 
     @Autowired
@@ -47,6 +47,7 @@ public class CreditControllerTest {
     }
 
     @Test
+    @Order(1)
     public void addCreditTest() throws Exception {
         Credit credit = new Credit(1000000, 1500000,
                 5.6, 30, "Квартира");
@@ -63,6 +64,7 @@ public class CreditControllerTest {
     }
 
     @Test
+    @Order(5)
     public void addCreditWithoutUserFailTest() throws Exception {
         Credit credit = new Credit(1000000, 1500000,
                 5.6, 30, "Квартира");
@@ -75,6 +77,7 @@ public class CreditControllerTest {
     }
 
     @Test
+    @Order(6)
     public void addCreditWithoutSellersFailTest() throws Exception {
         Credit credit = new Credit(1000000, 1500000,
                 5.6, 30, "Квартира");
@@ -88,6 +91,7 @@ public class CreditControllerTest {
     }
 
     @Test
+    @Order(7)
     public void addCreditValidFailTest() throws Exception {
         Credit credit = new Credit(1500000, 1400000,
                 5.6, 30, "Квартира");
@@ -102,6 +106,7 @@ public class CreditControllerTest {
     }
 
     @Test
+    @Order(2)
     public void getCreditTest() throws Exception {
         Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
         Credit credit = new Credit(1000000, 1500000,
@@ -113,6 +118,7 @@ public class CreditControllerTest {
     }
 
     @Test
+    @Order(8)
     public void getCreditConsistTest() throws Exception {
         Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
         Credit credit = new Credit(1000000, 1500000,
@@ -131,6 +137,7 @@ public class CreditControllerTest {
     }
 
     @Test
+    @Order(3)
     public void updateCreditTest() throws Exception{
         Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
         Credit credit = new Credit(1000000, 1500000,
@@ -149,6 +156,7 @@ public class CreditControllerTest {
     }
 
     @Test
+    @Order(4)
     public void deleteCreditTest() throws Exception{
         Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
         Credit credit = new Credit(1000000, 1500000,
