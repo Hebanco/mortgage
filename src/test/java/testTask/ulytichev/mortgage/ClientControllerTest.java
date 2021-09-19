@@ -84,4 +84,14 @@ public class ClientControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
     }
+
+    @Test
+    @Order(6)
+    public void createClientNotUniquePassportFailTest() throws Exception{
+        Client client = new Client("asdasf", "1234567890");
+        mockMvc.perform(post("/clients")
+                .content(objectMapper.writeValueAsString(client))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
 }

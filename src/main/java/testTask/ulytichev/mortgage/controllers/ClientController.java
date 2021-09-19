@@ -23,6 +23,8 @@ public class ClientController {
 
     @PostMapping(value = "/clients")
     public ResponseEntity<Client> create(@Valid @RequestBody Client client) {
+        if (!uniquePassportValidate(client.getPassportData()))
+            return new ResponseEntity<>(client, HttpStatus.BAD_REQUEST);
         clientRepo.saveAndFlush(client);
         return client.getId()!=0
                 ? new ResponseEntity<>(client, HttpStatus.CREATED)
@@ -50,10 +52,13 @@ public class ClientController {
         Optional<Client> dbClient = clientRepo.findById(id);
         if (dbClient.isPresent()) {
             Client newClient = dbClient.get();
-            if (updatedClient.getName()!=null/*||!updatedClient.getName().isEmpty()*/)
+            if (updatedClient.getName()!=null)
                 newClient.setName(updatedClient.getName());
-            if (updatedClient.getPassportData()!=null/*||!updatedClient.getPassportData().isEmpty()*/)
+            if (updatedClient.getPassportData()!=null) {
+                if (!uniquePassportValidate(updatedClient.getPassportData()))
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 newClient.setPassportData(updatedClient.getPassportData());
+            }
             clientRepo.saveAndFlush(newClient);
             return new ResponseEntity<>(newClient,HttpStatus.OK);
         }
@@ -68,5 +73,12 @@ public class ClientController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    }
+
+    private boolean uniquePassportValidate (String passportData){
+        Client client = clientRepo.findByPassportData(passportData);
+        if (client!=null)
+            return false;
+        return true;
     }
 }
