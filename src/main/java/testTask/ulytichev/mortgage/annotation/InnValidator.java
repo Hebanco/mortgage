@@ -7,7 +7,6 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 public class InnValidator implements ConstraintValidator<InnValid, Seller> {
-
     @Override
     public boolean isValid(Seller seller, ConstraintValidatorContext constraintValidatorContext) {
         if (seller.getSellerType()!=null&&seller.getSellerType().equals(SellerType.COMPANY)) {
@@ -35,9 +34,7 @@ public class InnValidator implements ConstraintValidator<InnValid, Seller> {
             resNumber = resNumber % 11;
             if (resNumber % 10 == lastSymbol)
                 return true;
-            else
-                return false;
         }
-        else return true;
+        return true;
     }
 }

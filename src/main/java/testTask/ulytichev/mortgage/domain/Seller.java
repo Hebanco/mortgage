@@ -38,8 +38,7 @@ public class Seller {
         this.sellerType = sellerType;
     }
 
-    public Seller() {
-    }
+    public Seller() {}
 
     public int getId() {
         return id;

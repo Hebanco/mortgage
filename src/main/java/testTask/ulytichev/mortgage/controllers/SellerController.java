@@ -33,7 +33,6 @@ public class SellerController {
     @GetMapping(value = "/sellers")
     public ResponseEntity<List<Seller>> read() {
         final List<Seller> sellers = sellerRepo.findAll();
-
         return sellers != null &&  !sellers.isEmpty()
                 ? new ResponseEntity<>(sellers, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -42,7 +41,6 @@ public class SellerController {
     @GetMapping(value = "/sellers/{id}")
     public ResponseEntity<Seller> read(@PathVariable(name = "id") int id) {
         final Optional<Seller> seller = sellerRepo.findById(id);
-
         return seller.isPresent()
                 ? new ResponseEntity<>(seller.get(), HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -50,7 +48,6 @@ public class SellerController {
 
     @PutMapping(value = "/sellers/{id}")
     public ResponseEntity<Seller> update(@PathVariable(name = "id") int id, @Valid @RequestBody Seller updatedSeller) {
-
         Optional<Seller> dbSeller = sellerRepo.findById(id);
         if (dbSeller.isPresent()) {
             Seller newSeller = dbSeller.get();

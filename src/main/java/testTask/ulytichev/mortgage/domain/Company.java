@@ -9,8 +9,7 @@ public class Company extends Seller{
     private String name;
     private String inn;
 
-    public Company() {
-    }
+    public Company() {}
 
     public Company(int id, String name, String inn) {
         this.id = id;

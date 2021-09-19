@@ -19,8 +19,7 @@ public class Client {
     @Column(unique = true)
     private String passportData;
 
-    public Client() {
-    }
+    public Client() {}
 
     public Client(String name, String passportData) {
         this.name = name;

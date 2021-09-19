@@ -6,8 +6,7 @@ public class Salesman extends Seller{
     private String name;
     private String passportData;
 
-    public Salesman() {
-    }
+    public Salesman() {}
 
     public Salesman(int id, String name, String passportData) {
         this.id = id;

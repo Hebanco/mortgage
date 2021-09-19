@@ -1,5 +1,6 @@
 package testTask.ulytichev.mortgage.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ public class CreditController {
     private final ClientRepo clientRepo;
     private final SellerRepo sellerRepo;
 
+    @Autowired
     public CreditController(CreditRepo creditRepo, ClientRepo clientRepo, SellerRepo sellerRepo) {
         this.creditRepo = creditRepo;
         this.clientRepo = clientRepo;
@@ -45,7 +47,6 @@ public class CreditController {
     @GetMapping(value = "/credits")
     public ResponseEntity<List<Credit>> readAll() {
         List<Credit> credits = creditRepo.findAll();
-
         return credits != null &&  !credits.isEmpty()
                 ? new ResponseEntity<>(credits, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -54,7 +55,6 @@ public class CreditController {
     @GetMapping(value = "/credits/{id}")
     public ResponseEntity<Credit> readById(@PathVariable(name = "id") int id) {
         Optional<Credit> credit = creditRepo.findById(id);
-
         return credit.isPresent()
                 ? new ResponseEntity<>(credit.get(), HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);

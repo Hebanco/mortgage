@@ -1,5 +1,6 @@
 package testTask.ulytichev.mortgage.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ public class ClientController {
 
     private final ClientRepo clientRepo;
 
+    @Autowired
     public ClientController(ClientRepo clientRepo) {
         this.clientRepo = clientRepo;
     }
@@ -37,9 +39,7 @@ public class ClientController {
 
     @GetMapping(value = "/clients/{id}")
     public ResponseEntity<Client> read(@PathVariable(name = "id") int id) {
-
          Optional<Client> client = clientRepo.findById(id);
-
         return client.isPresent()
                 ? new ResponseEntity<>(client.get(), HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -57,13 +57,11 @@ public class ClientController {
             clientRepo.saveAndFlush(newClient);
             return new ResponseEntity<>(newClient,HttpStatus.OK);
         }
-
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     @DeleteMapping(value = "/clients/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") int id) {
-
         Optional<Client> client = clientRepo.findById(id);
         if (client.isPresent()) {
             clientRepo.delete(client.get());
