@@ -25,3 +25,8 @@ String jsonInputCreditWithId = "{"creditAmount": "1000000", "totalAmount": "1500
 String jsonInputCreditByJSON = "{"creditAmount": "1000000", "totalAmount": "1500000", "creditRate": "-1", "years": "10",
 "objectOfCredit": "Квартира в новостройке", "client":{ "name": "gfd", "passportData": "1234567890"},
 "seller":{ "name": "gfd", "personalData": "7704407589", "sellerType": "COMPANY"}}";
+
+Для создания заявки есть 2 способа:
+  создать клиента и продавца и в ресте для создания заявки в качестве параметров указать их id 
+  передать данные клиента и продавца в самом ресте заявки
+  Также есть возможность реализации смешанного запроса, т.е. отправить Id клиента и в самом запросе данные продавца и наоборот
