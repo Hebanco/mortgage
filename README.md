@@ -23,8 +23,10 @@ API позволяет взаимодействовать с покупател�
   String jsonInputSeller = "{"name": "Seller salesman", "personalData": "7704407588", "sellerType": "SALESMAN"}";
   String jsonInputCreditWithId = "{"creditAmount": "1000000", "totalAmount": "1500000", "creditRate": "-1", 
 "years": "10", "objectOfCredit": "Квартира в новостройке"}";
+
   Передать данные клиента и продавца в самом ресте заявки:
   String jsonInputCreditByJSON = "{"creditAmount": "1000000", "totalAmount": "1500000", "creditRate": "-1", "years": "10",
 "objectOfCredit": "Квартира в новостройке", "client":{ "name": "gfd", "passportData": "1234567890"},
 "seller":{ "name": "gfd", "personalData": "7704407589", "sellerType": "COMPANY"}}";
+
   Также есть возможность реализации смешанного запроса, т.е. отправить Id клиента и в самом запросе данные продавца и наоборот
