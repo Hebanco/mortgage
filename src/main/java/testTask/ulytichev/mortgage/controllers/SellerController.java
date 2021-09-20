@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import testTask.ulytichev.mortgage.domain.Seller;
-import testTask.ulytichev.mortgage.domain.SellerType;
 import testTask.ulytichev.mortgage.repos.SellerRepo;
 
 import javax.validation.Valid;
@@ -24,10 +23,12 @@ public class SellerController {
 
     @PostMapping(value = "/sellers")
     public ResponseEntity<Seller> create(@Valid @RequestBody Seller seller) {
+        if (uniquePersonalDataValidate(seller)) {
             sellerRepo.saveAndFlush(seller);
-            return seller.getId()!=0
-                    ? new ResponseEntity<>(seller, HttpStatus.CREATED)
-                    : new ResponseEntity<>(HttpStatus.CONFLICT);
+            if (seller.getId() != 0)
+                    return new ResponseEntity<>(seller, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
     @GetMapping(value = "/sellers")
@@ -51,14 +52,26 @@ public class SellerController {
         Optional<Seller> dbSeller = sellerRepo.findById(id);
         if (dbSeller.isPresent()) {
             Seller newSeller = dbSeller.get();
-            if (updatedSeller.getName()!=null)
-                newSeller.setName(updatedSeller.getName());
-            if (updatedSeller.getPersonalData()!=null)
-                newSeller.setPersonalData(updatedSeller.getPersonalData());
-            sellerRepo.saveAndFlush(newSeller);
-            return new ResponseEntity<>(newSeller,HttpStatus.OK);
+            if (fillNewSellerByValues(updatedSeller, newSeller)) {
+                sellerRepo.saveAndFlush(newSeller);
+                return new ResponseEntity<>(newSeller, HttpStatus.OK);
+            }
         }
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    }
+
+    private boolean fillNewSellerByValues(Seller updatedSeller, Seller newSeller) {
+        if (updatedSeller.getName()!=null)
+            newSeller.setName(updatedSeller.getName());
+        if (updatedSeller.getSellerType()!=null)
+            newSeller.setSellerType(updatedSeller.getSellerType());
+        if (updatedSeller.getPersonalData()!=null) {
+            newSeller.setPersonalData(updatedSeller.getPersonalData());
+            if (!uniquePersonalDataValidate(newSeller)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @DeleteMapping(value = "/sellers/{id}")
@@ -69,5 +82,14 @@ public class SellerController {
             return new  ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    }
+
+    private boolean uniquePersonalDataValidate (Seller seller){
+        Seller dbSeller = sellerRepo.findByPersonalDataAndSellerType(seller.getPersonalData(),
+                seller.getSellerType());
+        if (dbSeller!=null)
+            if(dbSeller.getId()!=seller.getId())
+                return false;
+        return true;
     }
 }

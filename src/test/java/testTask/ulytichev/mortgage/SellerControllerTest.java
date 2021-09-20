@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import testTask.ulytichev.mortgage.controllers.SellerController;
 import testTask.ulytichev.mortgage.domain.Seller;
@@ -19,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Sql(value = {"/create-seller-before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public class SellerControllerTest {
     @Autowired
     private SellerController sellerController;
@@ -35,7 +37,7 @@ public class SellerControllerTest {
     }
 
     @Test
-    @Order(1)
+    @Order(4)
     public void addSellerTest() throws Exception {
         sellerRepo.deleteAll();
         Seller seller = new Seller("asdasf", "7704407589", SellerType.COMPANY);
@@ -57,36 +59,30 @@ public class SellerControllerTest {
     }
 
     @Test
-    @Order(2)
+    @Order(1)
     public void getSellerTest() throws Exception {
-        Seller seller = new Seller("asdasf", "7704407589", SellerType.COMPANY);
-        sellerRepo.saveAndFlush(seller);
         this.mockMvc.perform(get("/sellers"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists());
     }
 
     @Test
-    @Order(3)
+    @Order(2)
     public void updateSellerTest() throws Exception{
-        Seller dbSeller = new Seller("asdasf", "7704407589", SellerType.COMPANY);
-        sellerRepo.saveAndFlush(dbSeller);
         Seller updatedSeller = new Seller();
         updatedSeller.setName("ryew");
-        this.mockMvc.perform(put("/sellers/"+dbSeller.getId())
+        this.mockMvc.perform(put("/sellers/1")
                 .content(objectMapper.writeValueAsString(updatedSeller))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(dbSeller.getId()))
+                .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("ryew"));
     }
 
     @Test
-    @Order(4)
+    @Order(3)
     public void deleteSellerTest() throws Exception{
-        Seller seller = new Seller("asdasf", "1234567890", SellerType.SALESMAN);
-        sellerRepo.saveAndFlush(seller);
-        this.mockMvc.perform(delete("/sellers/"+seller.getId()))
+        this.mockMvc.perform(delete("/sellers/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
     }
