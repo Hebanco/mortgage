@@ -71,12 +71,4 @@ public class Seller {
     public void setSellerType(SellerType sellerType) {
         this.sellerType = sellerType;
     }
-
-    public static Seller convertCompanyToSeller (Company company){
-        return new Seller(company.getId(), company.getName(), company.getInn(), SellerType.COMPANY);
-    }
-
-    public static Seller convertSalesmanToSeller (Salesman salesman){
-        return new Seller(salesman.getId(), salesman.getName(), salesman.getPassportData(), SellerType.SALESMAN);
-    }
 }
