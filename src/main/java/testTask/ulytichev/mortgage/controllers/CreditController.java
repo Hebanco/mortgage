@@ -33,12 +33,12 @@ public class CreditController {
     public ResponseEntity<Credit> create(@Valid @RequestBody Credit credit,
                                          @RequestParam(required = false, defaultValue = "-1", name = "clientId") int clientId,
                                          @RequestParam(required = false, defaultValue = "-1", name = "sellerId") int sellerId) {
-        if (!setClientForCredit(credit, clientId))
+        if (!addClientForCredit(credit, clientId))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        if (!setSellerForCredit(credit, sellerId))
+        if (!addSellerForCredit(credit, sellerId))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         creditRepo.saveAndFlush(credit);
-        if (credit.getId()!=0)
+        if (credit.getId() != 0)
             return new ResponseEntity<>(credit, HttpStatus.CREATED);
         else
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -69,13 +69,13 @@ public class CreditController {
         Optional<Credit> dbCredit = creditRepo.findById(id);
         if (dbCredit.isPresent()) {
             Credit newCredit = dbCredit.get();
-            if (!setClientForCredit(newCredit, clientId))
+            if (!addClientForCredit(newCredit, clientId))
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            if (!setSellerForCredit(newCredit, sellerId))
+            if (!addSellerForCredit(newCredit, sellerId))
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             fillNewCreditByValues(updatedCredit, newCredit);
                 creditRepo.saveAndFlush(newCredit);
-                if (newCredit.getId()!=0){
+                if (newCredit.getId() != 0){
                     return new ResponseEntity<>(newCredit, HttpStatus.OK);
                 } else
                     return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -84,15 +84,15 @@ public class CreditController {
     }
 
     private void fillNewCreditByValues(Credit updatedCredit, Credit newCredit) {
-        if (updatedCredit.getCreditAmount()>0)
+        if (updatedCredit.getCreditAmount() > 0)
             newCredit.setCreditAmount(updatedCredit.getCreditAmount());
-        if (updatedCredit.getTotalAmount()>0)
+        if (updatedCredit.getTotalAmount() > 0)
             newCredit.setTotalAmount(updatedCredit.getTotalAmount());
-        if (updatedCredit.getCreditRate()>0)
+        if (updatedCredit.getCreditRate() > 0)
             newCredit.setCreditRate(updatedCredit.getCreditRate());
-        if (updatedCredit.getYears()>0)
+        if (updatedCredit.getYears() > 0)
             newCredit.setYears(updatedCredit.getYears());
-        if (updatedCredit.getObjectOfCredit()!=null)
+        if (updatedCredit.getObjectOfCredit() != null)
             newCredit.setObjectOfCredit(updatedCredit.getObjectOfCredit());
     }
 
@@ -106,30 +106,30 @@ public class CreditController {
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    private boolean setClientForCredit(Credit credit, int clientId) {
-        if (clientId !=-1) {
+    private boolean addClientForCredit(Credit credit, int clientId) {
+        if (clientId != -1) {
             Optional<Client> client = clientRepo.findById(clientId);
             if (client.isPresent()) {
                 credit.setClient(client.get());
                 return true;
             }
         }
-        else if (credit.getClient()!=null){
+        else if (credit.getClient() != null){
             clientRepo.saveAndFlush(credit.getClient());
             return true;
         }
         return false;
     }
 
-    private boolean setSellerForCredit(Credit credit, int sellerId) {
-        if (sellerId !=-1) {
+    private boolean addSellerForCredit(Credit credit, int sellerId) {
+        if (sellerId != -1) {
             Optional<Seller> seller = sellerRepo.findById(sellerId);
             if (seller.isPresent()){
                 credit.setSeller(seller.get());
                 return true;
             }
         }
-        else if (credit.getSeller()!=null) {
+        else if (credit.getSeller() != null) {
             sellerRepo.saveAndFlush(credit.getSeller());
             return true;
         }

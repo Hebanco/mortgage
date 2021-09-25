@@ -86,4 +86,14 @@ public class SellerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
     }
+
+    @Test
+    @Order(6)
+    public void addSellerFailInnTest() throws Exception {
+        Seller seller = new Seller("asdasf", "7704407583", SellerType.COMPANY);
+        mockMvc.perform(post("/sellers")
+                .content(objectMapper.writeValueAsString(seller))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
 }

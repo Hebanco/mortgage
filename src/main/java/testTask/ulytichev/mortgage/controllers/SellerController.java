@@ -34,7 +34,7 @@ public class SellerController {
     @GetMapping(value = "/sellers")
     public ResponseEntity<List<Seller>> read() {
         final List<Seller> sellers = sellerRepo.findAll();
-        return sellers != null &&  !sellers.isEmpty()
+        return sellers != null && !sellers.isEmpty()
                 ? new ResponseEntity<>(sellers, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -61,15 +61,14 @@ public class SellerController {
     }
 
     private boolean fillNewSellerByValues(Seller updatedSeller, Seller newSeller) {
-        if (updatedSeller.getName()!=null)
+        if (updatedSeller.getName() != null)
             newSeller.setName(updatedSeller.getName());
-        if (updatedSeller.getSellerType()!=null)
+        if (updatedSeller.getSellerType() != null)
             newSeller.setSellerType(updatedSeller.getSellerType());
-        if (updatedSeller.getPersonalData()!=null) {
+        if (updatedSeller.getPersonalData() != null) {
             newSeller.setPersonalData(updatedSeller.getPersonalData());
-            if (!uniquePersonalDataValidate(newSeller)) {
+            if (!uniquePersonalDataValidate(newSeller))
                 return false;
-            }
         }
         return true;
     }
@@ -87,8 +86,8 @@ public class SellerController {
     private boolean uniquePersonalDataValidate (Seller seller){
         Seller dbSeller = sellerRepo.findByPersonalDataAndSellerType(seller.getPersonalData(),
                 seller.getSellerType());
-        if (dbSeller!=null)
-            if(dbSeller.getId()!=seller.getId())
+        if (dbSeller != null)
+            if(dbSeller.getId() != seller.getId())
                 return false;
         return true;
     }

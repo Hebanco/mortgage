@@ -1,7 +1,6 @@
 package testTask.ulytichev.mortgage.repos;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import testTask.ulytichev.mortgage.domain.Seller;
 import testTask.ulytichev.mortgage.domain.SellerType;
 

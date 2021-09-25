@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy=CreditValidator.class)
+@Constraint(validatedBy = CreditValidator.class)
 public @interface CreditAmountValid {
     String message() default "Сумма кредита превышает общую стоимость";
     Class<?>[] groups() default {};

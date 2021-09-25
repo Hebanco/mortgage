@@ -51,8 +51,6 @@ public class CreditControllerTest {
     public void addCreditTest() throws Exception {
         Credit credit = new Credit(1000000, 1500000,
                 5.6, 30, "Квартира");
-//        Seller seller = createSeller("seller", "7704407589", SellerType.COMPANY);
-
         mockMvc.perform(post("/credits")
                 .content(objectMapper.writeValueAsString(credit))
                 .param("clientId", "1")

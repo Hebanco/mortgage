@@ -26,7 +26,7 @@ public class ClientController {
         if (!uniquePassportValidate(client.getPassportData()))
             return new ResponseEntity<>(client, HttpStatus.BAD_REQUEST);
         clientRepo.saveAndFlush(client);
-        return client.getId()!=0
+        return client.getId() != 0
                 ? new ResponseEntity<>(client, HttpStatus.CREATED)
                 : new ResponseEntity<>(HttpStatus.CONFLICT);
     }
@@ -52,9 +52,9 @@ public class ClientController {
         Optional<Client> dbClient = clientRepo.findById(id);
         if (dbClient.isPresent()) {
             Client newClient = dbClient.get();
-            if (updatedClient.getName()!=null)
+            if (updatedClient.getName() != null)
                 newClient.setName(updatedClient.getName());
-            if (updatedClient.getPassportData()!=null) {
+            if (updatedClient.getPassportData() != null) {
                 if (!uniquePassportValidate(updatedClient.getPassportData()))
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 newClient.setPassportData(updatedClient.getPassportData());
@@ -77,7 +77,7 @@ public class ClientController {
 
     private boolean uniquePassportValidate (String passportData){
         Client client = clientRepo.findByPassportData(passportData);
-        if (client!=null)
+        if (client != null)
             return false;
         return true;
     }

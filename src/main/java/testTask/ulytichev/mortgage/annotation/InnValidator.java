@@ -13,28 +13,24 @@ public class InnValidator implements ConstraintValidator<InnValid, Seller> {
             long longInn = Long.parseLong(seller.getPersonalData());
             long resNumber = 0;
             int lastSymbol = (int) (longInn % 10);
-            int tempInn = (int) (longInn / 10);
-            resNumber += tempInn % 10 * 8;
-            tempInn /= 10;
-            resNumber += tempInn % 10 * 6;
-            tempInn /= 10;
-            resNumber += tempInn % 10 * 4;
-            tempInn /= 10;
-            resNumber += tempInn % 10 * 9;
-            tempInn /= 10;
-            resNumber += tempInn % 10 * 5;
-            tempInn /= 10;
-            resNumber += tempInn % 10 * 3;
-            tempInn /= 10;
-            resNumber += tempInn % 10 * 10;
-            tempInn /= 10;
-            resNumber += tempInn % 10 * 4;
-            tempInn /= 10;
-            resNumber += tempInn * 2;
-            resNumber = resNumber % 11;
+            resNumber += countParameter(longInn /= 10, 8);
+            resNumber += countParameter(longInn /= 10, 6);
+            resNumber += countParameter(longInn /= 10, 4);
+            resNumber += countParameter(longInn /= 10, 9);
+            resNumber += countParameter(longInn /= 10, 5);
+            resNumber += countParameter(longInn /= 10, 3);
+            resNumber += countParameter(longInn /= 10, 10);
+            resNumber += countParameter(longInn /= 10, 4);
+            resNumber += countParameter(longInn, 2);
+            resNumber %= 11;
             if (resNumber % 10 == lastSymbol)
                 return true;
+            else return false;
         }
         return true;
+    }
+
+    private long countParameter(long tempInn, int param){
+        return tempInn % 10 * param;
     }
 }

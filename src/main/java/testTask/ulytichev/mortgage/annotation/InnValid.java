@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy=InnValidator.class)
+@Constraint(validatedBy = InnValidator.class)
 public @interface InnValid {
     String message() default "Не правильно введен ИНН";
     Class<?>[] groups() default {};
