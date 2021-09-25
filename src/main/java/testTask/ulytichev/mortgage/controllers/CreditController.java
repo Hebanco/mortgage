@@ -47,7 +47,7 @@ public class CreditController {
     @GetMapping(value = "/credits")
     public ResponseEntity<List<Credit>> readAll() {
         List<Credit> credits = creditRepo.findAll();
-        return credits != null &&  !credits.isEmpty()
+        return credits != null && !credits.isEmpty()
                 ? new ResponseEntity<>(credits, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

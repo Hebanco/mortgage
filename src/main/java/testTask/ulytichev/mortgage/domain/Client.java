@@ -15,7 +15,7 @@ public class Client {
     private String name;
 
     @NotBlank
-    @Size(min = 10, max = 10, message = "Не правильные паспортные данные")
+    @Size(min = 10, max = 10, message = "Неправильные паспортные данные")
     @Column(unique = true)
     private String passportData;
 
