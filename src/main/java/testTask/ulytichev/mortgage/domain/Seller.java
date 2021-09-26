@@ -22,7 +22,8 @@ public class Seller {
     private String personalData;
 
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("SALESMAN")
+//    @Column(columnDefinition = "varchar(255) default \'SALESMAN\'")
+    @ColumnDefault("\'SALESMAN\'")
     private SellerType sellerType;
 
     public Seller(String name, String personalData, SellerType sellerType) {

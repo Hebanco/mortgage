@@ -25,7 +25,7 @@ create table seller (
     id integer not null,
     name varchar(255),
     personal_data varchar(10),
-    seller_type varchar(255),
+    seller_type varchar(255) default 'SALESMAN',
     primary key (id)
 );
 

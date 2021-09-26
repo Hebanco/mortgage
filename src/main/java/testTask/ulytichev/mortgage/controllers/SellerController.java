@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import testTask.ulytichev.mortgage.domain.Seller;
+import testTask.ulytichev.mortgage.domain.SellerType;
 import testTask.ulytichev.mortgage.repos.SellerRepo;
 
 import javax.validation.Valid;
@@ -24,6 +25,8 @@ public class SellerController {
     @PostMapping(value = "/sellers")
     public ResponseEntity<Seller> create(@Valid @RequestBody Seller seller) {
         if (uniquePersonalDataValidate(seller)) {
+            if (seller.getSellerType() == null)
+                seller.setSellerType(SellerType.SALESMAN);
             sellerRepo.saveAndFlush(seller);
             if (seller.getId() != 0)
                 return new ResponseEntity<>(seller, HttpStatus.CREATED);

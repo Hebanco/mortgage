@@ -59,6 +59,20 @@ public class SellerControllerTest {
     }
 
     @Test
+    @Order(6)
+    public void addSellerWithoutTypeTest() throws Exception {
+        sellerRepo.deleteAll();
+        Seller seller = new Seller();
+        seller.setName("asdasf");
+        seller.setPersonalData("7704407589");
+        mockMvc.perform(post("/sellers")
+                .content(objectMapper.writeValueAsString(seller))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.sellerType").value("SALESMAN"));
+    }
+
+    @Test
     @Order(1)
     public void getSellerTest() throws Exception {
         this.mockMvc.perform(get("/sellers"))
