@@ -9,7 +9,7 @@ import javax.validation.ConstraintValidatorContext;
 public class InnValidator implements ConstraintValidator<InnValid, Seller> {
     @Override
     public boolean isValid(Seller seller, ConstraintValidatorContext constraintValidatorContext) {
-        if (seller.getSellerType()!=null&&seller.getSellerType().equals(SellerType.COMPANY)) {
+        if (seller.getSellerType() != null && seller.getSellerType().equals(SellerType.COMPANY)) {
             long longInn = Long.parseLong(seller.getPersonalData());
             long resNumber = 0;
             int lastSymbol = (int) (longInn % 10);
@@ -30,7 +30,7 @@ public class InnValidator implements ConstraintValidator<InnValid, Seller> {
         return true;
     }
 
-    private long countParameter(long tempInn, int param){
+    private long countParameter(long tempInn, int param) {
         return tempInn % 10 * param;
     }
 }

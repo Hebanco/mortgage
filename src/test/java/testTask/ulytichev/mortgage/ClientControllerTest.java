@@ -66,7 +66,7 @@ public class ClientControllerTest {
 
     @Test
     @Order(2)
-    public void updateClientTest() throws Exception{
+    public void updateClientTest() throws Exception {
         Client updatedClient = new Client();
         updatedClient.setPassportData("0987654321");
         this.mockMvc.perform(put("/clients/1")
@@ -79,7 +79,7 @@ public class ClientControllerTest {
 
     @Test
     @Order(3)
-    public void deleteClientTest() throws Exception{
+    public void deleteClientTest() throws Exception {
         this.mockMvc.perform(delete("/clients/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
@@ -87,7 +87,7 @@ public class ClientControllerTest {
 
     @Test
     @Order(6)
-    public void createClientNotUniquePassportFailTest() throws Exception{
+    public void createClientNotUniquePassportFailTest() throws Exception {
         Client client = new Client("asdasf", "1234567890");
         mockMvc.perform(post("/clients")
                 .content(objectMapper.writeValueAsString(client))

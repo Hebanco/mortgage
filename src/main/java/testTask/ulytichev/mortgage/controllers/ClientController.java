@@ -41,7 +41,7 @@ public class ClientController {
 
     @GetMapping(value = "/clients/{id}")
     public ResponseEntity<Client> read(@PathVariable(name = "id") int id) {
-         Optional<Client> client = clientRepo.findById(id);
+        Optional<Client> client = clientRepo.findById(id);
         return client.isPresent()
                 ? new ResponseEntity<>(client.get(), HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -60,7 +60,7 @@ public class ClientController {
                 newClient.setPassportData(updatedClient.getPassportData());
             }
             clientRepo.saveAndFlush(newClient);
-            return new ResponseEntity<>(newClient,HttpStatus.OK);
+            return new ResponseEntity<>(newClient, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
@@ -75,7 +75,7 @@ public class ClientController {
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    private boolean uniquePassportValidate (String passportData){
+    private boolean uniquePassportValidate(String passportData) {
         Client client = clientRepo.findByPassportData(passportData);
         if (client != null)
             return false;

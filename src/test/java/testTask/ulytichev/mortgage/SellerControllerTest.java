@@ -68,7 +68,7 @@ public class SellerControllerTest {
 
     @Test
     @Order(2)
-    public void updateSellerTest() throws Exception{
+    public void updateSellerTest() throws Exception {
         Seller updatedSeller = new Seller();
         updatedSeller.setName("ryew");
         this.mockMvc.perform(put("/sellers/1")
@@ -81,7 +81,7 @@ public class SellerControllerTest {
 
     @Test
     @Order(3)
-    public void deleteSellerTest() throws Exception{
+    public void deleteSellerTest() throws Exception {
         this.mockMvc.perform(delete("/sellers/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());

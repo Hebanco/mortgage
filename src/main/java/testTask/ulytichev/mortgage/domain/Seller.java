@@ -18,7 +18,7 @@ public class Seller {
     @NotBlank(message = "Отсутствует имя компании")
     private String name;
 
-    @Length (min = 10, max = 10, message = "Больше 10 символов данных у продавца")
+    @Length(min = 10, max = 10, message = "Больше 10 символов данных у продавца")
     private String personalData;
 
     @Enumerated(EnumType.STRING)
@@ -38,7 +38,8 @@ public class Seller {
         this.sellerType = sellerType;
     }
 
-    public Seller() {}
+    public Seller() {
+    }
 
     public int getId() {
         return id;

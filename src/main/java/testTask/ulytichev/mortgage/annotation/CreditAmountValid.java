@@ -12,6 +12,8 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = CreditValidator.class)
 public @interface CreditAmountValid {
     String message() default "Сумма кредита превышает общую стоимость";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

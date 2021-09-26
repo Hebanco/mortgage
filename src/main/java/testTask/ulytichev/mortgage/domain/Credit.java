@@ -37,7 +37,8 @@ public class Credit {
     @ManyToOne
     private Seller seller;
 
-    public Credit() {}
+    public Credit() {
+    }
 
     public Credit(long creditAmount, long totalAmount, double creditRate, int years, String objectOfCredit, Client client, Seller seller) {
         this.creditAmount = creditAmount;

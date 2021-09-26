@@ -113,9 +113,9 @@ public class CreditControllerTest {
     @Order(8)
     public void getCreditConsistTest() throws Exception {
         Credit credit = new Credit(1000000, 1500000,
-                5.6, 30, "Квартира" ,clientRepo.getOne(1), sellerRepo.getOne(1));
+                5.6, 30, "Квартира", clientRepo.getOne(1), sellerRepo.getOne(1));
         creditRepo.saveAndFlush(credit);
-        mockMvc.perform(get("/credits/"+credit.getId())
+        mockMvc.perform(get("/credits/" + credit.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.client.id").value(1))
@@ -128,14 +128,14 @@ public class CreditControllerTest {
 
     @Test
     @Order(3)
-    public void updateCreditTest() throws Exception{
+    public void updateCreditTest() throws Exception {
         Credit credit = new Credit(1000000, 1500000,
-                5.6, 30, "Квартира" ,clientRepo.getOne(1), sellerRepo.getOne(1));
+                5.6, 30, "Квартира", clientRepo.getOne(1), sellerRepo.getOne(1));
         creditRepo.saveAndFlush(credit);
         Credit updatedCredit = new Credit();
         updatedCredit.setCreditAmount(1500000);
         updatedCredit.setTotalAmount(1900000);
-        this.mockMvc.perform(put("/credits/"+credit.getId())
+        this.mockMvc.perform(put("/credits/" + credit.getId())
                 .content(objectMapper.writeValueAsString(updatedCredit))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -146,11 +146,11 @@ public class CreditControllerTest {
 
     @Test
     @Order(4)
-    public void deleteCreditTest() throws Exception{
+    public void deleteCreditTest() throws Exception {
         Credit credit = new Credit(1000000, 1500000,
-                5.6, 30, "Квартира" ,clientRepo.getOne(1), sellerRepo.getOne(1));
+                5.6, 30, "Квартира", clientRepo.getOne(1), sellerRepo.getOne(1));
         creditRepo.saveAndFlush(credit);
-        this.mockMvc.perform(delete("/credits/"+credit.getId()))
+        this.mockMvc.perform(delete("/credits/" + credit.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
     }

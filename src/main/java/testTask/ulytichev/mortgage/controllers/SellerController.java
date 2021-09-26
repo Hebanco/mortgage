@@ -26,7 +26,7 @@ public class SellerController {
         if (uniquePersonalDataValidate(seller)) {
             sellerRepo.saveAndFlush(seller);
             if (seller.getId() != 0)
-                    return new ResponseEntity<>(seller, HttpStatus.CREATED);
+                return new ResponseEntity<>(seller, HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
@@ -78,16 +78,16 @@ public class SellerController {
         Optional<Seller> seller = sellerRepo.findById(id);
         if (seller.isPresent()) {
             sellerRepo.delete(seller.get());
-            return new  ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    private boolean uniquePersonalDataValidate (Seller seller){
+    private boolean uniquePersonalDataValidate(Seller seller) {
         Seller dbSeller = sellerRepo.findByPersonalDataAndSellerType(seller.getPersonalData(),
                 seller.getSellerType());
         if (dbSeller != null)
-            if(dbSeller.getId() != seller.getId())
+            if (dbSeller.getId() != seller.getId())
                 return false;
         return true;
     }

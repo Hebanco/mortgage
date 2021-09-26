@@ -12,6 +12,8 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = InnValidator.class)
 public @interface InnValid {
     String message() default "Не правильно введен ИНН";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }
